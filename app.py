@@ -34,7 +34,8 @@ def get_route_data():
     route_data = query_database(start_lat, start_lng, end_lat, end_lng, time_of_day)
 
     # Results
-    return jsonify(route_data)
+    return route_data['message']
+
 
 
 @app.route('/report_accident', methods=['POST'])
