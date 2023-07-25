@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Drive Smart Texas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #57A0D2;
+            color: white;
+        }
+        form {
+            background-color: white;
+            color: #57A0D2;
+            margin: 2em 0;
+            padding: 1em;
+            border-radius: 1em;
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        input[type="text"], input[type="number"], select, textarea {
+            width: 100%;
+            padding: 0.5em;
+            margin: 0.5em 0;
+            display: inline-block;
+            border: 1px solid #57A0D2;
+            border-radius: 0.5em;
+        }
+        input[type="submit"] {
+            background-color: #57A0D2;
+            color: white;
+            border: none;
+            padding: 1em 2em;
+            text-decoration: none;
+            margin: 0.5em 0;
+            cursor: pointer;
+            border-radius: 0.5em;
+        }
+        button {
+            margin-left: 1em;
+            background-color: #57A0D2;
+            color: white;
+            border: none;
+            padding: 0.5em 1em;
+            text-decoration: none;
+            cursor: pointer;
+            border-radius: 0.5em;
+        }
+    </style>
+    <script>
+    function getLocation(inputFieldId) {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                document.getElementById(inputFieldId).value = `${position.coords.latitude}, ${position.coords.longitude}`;
+            });
+        } else {
+            alert("Geolocation is not supported by this browser.");
+        }
+    }
+    </script>
+</head>
+<body>
+    <h1>Drive Smart Texas</h1>
+    <h2>Get Route Data</h2>
+    <form action="/get_route_data" method="post">
+        Start Address: <input type="text" id="start_address" name="start_address" required><button type="button" onclick="getLocation('start_address')">Use My Location</button><br>
+        End Address: <input type="text" name="end_address" required><br>
+        Time of Day: 
+        <select name="time_of_day" required>
+            <option value="Day">Day</option>
+            <option value="Night">Night</option>
+        </select><br>
+        Weather Condition: 
+        <select name="weather" required>
+            <option value="Clear/Fair Weather">Clear/Fair Weather</option>
+            <option value="Cloudy">Cloudy</option>
+            <option value="Rain">Rain</option>
+            <option value="Thunderstorms">Thunderstorms</option>
+            <option value="Windy">Windy</option>
+            <option value="Fog/Haze/Mist">Fog/Haze/Mist</option>
+            <option value="Snow/Winter Weather">Snow/Winter Weather</option>
+        </select><br>
+        <input type="submit" value="Get Route Data">
+    </form>
+
+    <h2>Report an Accident</h2>
+    <form action="/report_accident" method="post">
+        Location: <input type="text" id="location" name="location" required><button type="button" onclick="getLocation('location')">Use My Location</button><br>
+        Severity (2-Mild) (3-Moderate) (4-Severe): <input type="number" name="severity" min="2" max="4" required><br>
+        Description: <textarea name="description" required></textarea><br>
+        Time of Day: 
+        <select name="sunrise_sunset" required>
+            <option value="Day">Day</option>
+            <option value="Night">Night</option>
+        </select><br>
+        Weather Condition: 
+        <select name="weather" required>
+            <option value="Clear/Fair Weather">Clear/Fair Weather</option>
+            <option value="Cloudy">Cloudy</option>
+            <option value="Rain">Rain</option>
+            <option value="Thunderstorms">Thunderstorms</option>
+            <option value="Windy">Windy</option>
+            <option value="Fog/Haze/Mist">Fog/Haze/Mist</option>
+            <option value="Snow/Winter Weather">Snow/Winter Weather</option>
+        </select><br>
+        <input type="submit" value="Report Accident">
+     </form>
+</body>
+</html>
