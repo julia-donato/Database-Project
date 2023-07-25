@@ -19,8 +19,8 @@ url = urlparse(CLEARDB_DATABASE_URL)
 user = url.username
 passwrd = url.password
 host = url.hostname
-database = url.path[1:]  # remove leading slash
-
+database = url.path[1:]
+port = url.port
 
 
 @app.route('/')
@@ -28,25 +28,25 @@ def home():
     return render_template('index.html')
 
 @app.route('/get_route_data', methods=['POST'])
-
 def get_route_data():
-    # Get addresses and time of day
-    start_address = request.form.get('start_address')
-    end_address = request.form.get('end_address')
-    time_of_day = request.form.get('time_of_day')
-    weather = request.form.get('weather')
-    # Weather
+    try:
+        # Get addresses and time of day
+        start_address = request.form.get('start_address')
+        end_address = request.form.get('end_address')
+        time_of_day = request.form.get('time_of_day')
+        weather = request.form.get('weather')
 
-    # Convert start and end addresses to lat, long using Google API
-    start_lat, start_lng = get_lat_lng(start_address)
-    end_lat, end_lng = get_lat_lng(end_address)
+        # Convert start and end addresses to lat, long using Google API
+        start_lat, start_lng = get_lat_lng(start_address)
+        end_lat, end_lng = get_lat_lng(end_address)
 
-    # Query MySQL database
-    route_data = query_database(start_lat, start_lng, end_lat, end_lng, time_of_day, weather)
+        # Query MySQL database
+        route_data = query_database(start_lat, start_lng, end_lat, end_lng, time_of_day, weather)
 
-    # Results
-    return route_data['message']
-
+        # Results
+        return route_data['message']
+    except ValueError as e:
+        return str(e), 400
 
 
 @app.route('/report_accident', methods=['POST'])
@@ -81,7 +81,7 @@ def get_lat_lng(address):
         raise ValueError('Invalid address provided')
 
 def query_database(start_lat, start_lng, end_lat, end_lng, time_of_day, weather):
-    conn = mysql.connector.connect(user=user, password= passwrd, host= host, database=database, port=8889)
+    conn = mysql.connector.connect(user=user, password= passwrd, host= host, database=database, port=port)
     c = conn.cursor()
     
     # Query based on user route data- add weather condition as WHERE condition, join on weather attributes- Pooja
@@ -115,7 +115,7 @@ def query_database(start_lat, start_lng, end_lat, end_lng, time_of_day, weather)
     return {'message': message}
 
 def insert_to_database(lat, lng, severity, description, sunrise_sunset):
-    conn = mysql.connector.connect(user=user, password=passwrd, host=host, database=database, port=8889)
+    conn = mysql.connector.connect(user=user, password=passwrd, host=host, database=database, port=port)
     c = conn.cursor()
 
     # Highest current Incident_ID
