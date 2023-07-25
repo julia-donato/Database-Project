@@ -4,14 +4,14 @@ from flask import Flask, request, render_template
 import requests
 import mysql.connector
 import numpy as np
-
+import os
+from urllib.parse import urlparse
 app = Flask(__name__)
 
 # Google API key 
 Google_Key = os.getenv("Google_Key")
 
-import os
-from urllib.parse import urlparse
+
 
 CLEARDB_DATABASE_URL = os.environ.get("DATABASE_URL")
 url = urlparse(CLEARDB_DATABASE_URL)
