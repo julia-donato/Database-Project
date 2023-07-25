@@ -20,7 +20,8 @@ user = url.username
 passwrd = url.password
 host = url.hostname
 database = url.path[1:]
-port = url.port
+port = url.port if url.port else 3306
+
 
 
 @app.route('/')
