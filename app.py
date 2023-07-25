@@ -8,12 +8,12 @@ import numpy as np
 app = Flask(__name__)
 
 # Google API key 
-Google_Key = "AIzaSyAQpwvYBCrZVd12jxGEFKWDEz1B2WyeDzA"
+Google_Key = os.getenv("Google_Key")
 
 import os
 from urllib.parse import urlparse
 
-CLEARDB_DATABASE_URL = os.environ.get("mysql://b634b613c25a64:d1918e87@us-cdbr-east-06.cleardb.net/heroku_17b118814fe09f8?reconnect=true")
+CLEARDB_DATABASE_URL = os.environ.get("DATABASE_URL")
 url = urlparse(CLEARDB_DATABASE_URL)
 
 user = url.username
